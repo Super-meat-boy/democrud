@@ -5,12 +5,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/foos")
 class FooController {
+
+
+    @RequestMapping("/cookie")
+    @ResponseBody
+    public static void create(HttpServletResponse response) {
+        Cookie cookie = new Cookie("cookie", "112");
+        response.addCookie(cookie);
+        System.out.println(cookie);
+    }
+
+
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -35,6 +48,12 @@ class FooController {
     public Long create(@RequestBody Foo resource) {
         System.out.println("Tentative de création de " + resource);
         return 1L;
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Foo read(@PathVariable("id") Long id) {
+        return new Foo(id, "fake read");
     }
 
 }
